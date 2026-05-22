@@ -1,0 +1,70 @@
+/* app.wxss - 全局样式 + 暗色模式 */
+/* 浅色主题变量（暖木色系） */
+page {
+  --page-bg: #F8F5F0;
+  --card-bg: #FFFFFF;
+  --card-shadow: 0 4rpx 24rpx rgba(44, 24, 16, 0.06);
+  --card-border: transparent;
+  --text-primary: #1A0E08;
+  --text-secondary: #A09080;
+  --text-light: #C0B0A0;
+  --divider: #F0EDE8;
+  --accent: #D32F2F;
+  --accent-light: #FFF0F0;
+  --surface: #F8F5F0;
+  --hero-icon-shadow: none;
+  --hero-title: #1A0E08;
+  --hero-subtitle: #A09080;
+  --label-color: #5A4A3A;
+  --table-header-bg: #FFF0F0;
+  --table-header-color: #888;
+  --table-color: #5A4A3A;
+  --table-note-color: #2C1810;
+  --table-note-muted: #CCC;
+  --table-fret-color: #888;
+  --table-status-color: #888;
+  --btn-primary-bg: linear-gradient(135deg, #D32F2F, #F57C00);
+  --btn-primary-shadow: 0 8rpx 24rpx rgba(211, 47, 47, 0.3);
+  --play-btn-bg: #D32F2F;
+  --play-btn-shadow: 0 4rpx 16rpx rgba(211, 47, 47, 0.25);
+  --play-btn-active-bg: #2E7D32;
+  --play-btn-active-shadow: 0 4rpx 16rpx rgba(46, 125, 50, 0.25);
+  --save-btn-bg: linear-gradient(135deg, #D32F2F, #F57C00);
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  box-sizing: border-box;
+}
+
+/* 暗色主题变量（星空深蓝系） */
+.dark-mode {
+  --page-bg: #141424;
+  --card-bg: #22223A;
+  --card-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.3);
+  --card-border: #333358;
+  --text-primary: #F0EBE0;
+  --text-secondary: #A09888;
+  --text-light: #706858;
+  --divider: #2E2E50;
+  --accent: #FF6B6B;
+  --accent-light: #331818;
+  --surface: #1A1A2E;
+  --hero-icon-shadow: 0 0 20rpx rgba(255, 107, 107, 0.2);
+  --hero-title: #FF6B6B;
+  --hero-subtitle: #A09888;
+  --label-color: #B0A898;
+  --table-header-bg: #1E1E38;
+  --table-header-color: #908878;
+  --table-color: #D0C8B8;
+  --table-note-color: #F0EBE0;
+  --table-note-muted: #555;
+  --table-fret-color: #908878;
+  --table-status-color: #706858;
+  --btn-primary-bg: linear-gradient(135deg, #FF6B6B, #E85555);
+  --btn-primary-shadow: 0 8rpx 24rpx rgba(255, 107, 107, 0.2);
+  --play-btn-bg: #FF6B6B;
+  --play-btn-shadow: 0 4rpx 16rpx rgba(255, 107, 107, 0.25);
+  --play-btn-active-bg: #3A9A5A;
+  --play-btn-active-shadow: 0 4rpx 16rpx rgba(58, 154, 90, 0.25);
+  --save-btn-bg: linear-gradient(135deg, #FF6B6B, #E85555);
+}

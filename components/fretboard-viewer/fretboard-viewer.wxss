@@ -1,0 +1,74 @@
+.fretboard-area {
+  display: flex;
+  flex-direction: row;
+  background: var(--surface);
+  overflow: hidden;
+  border-radius: 18rpx;
+  border: 2rpx solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  margin-bottom: 16rpx;
+  transition: all 0.2s;
+}
+
+.left-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 72rpx;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background: var(--surface);
+  z-index: 1;
+  padding-top: 22px;
+  padding-bottom: 18px;
+  transition: background 0.2s;
+}
+
+.label-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 0;
+}
+
+.label-string {
+  font-size: 24rpx;
+  font-weight: 700;
+  color: var(--label-color);
+  line-height: 1.2;
+  transition: color 0.2s;
+}
+
+.label-indicator {
+  font-size: 22rpx;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-top: 2rpx;
+}
+
+.label-indicator.indicator-muted {
+  color: var(--accent);
+  font-size: 26rpx;
+  transition: color 0.2s;
+}
+
+.label-indicator.indicator-open {
+  color: #2E7D32;
+  font-size: 24rpx;
+}
+
+.label-indicator.indicator-none {
+  color: transparent;
+  font-size: 12rpx;
+}
+
+.fretboard-scroll {
+  flex: 1;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.fretboard-canvas {
+  display: block;
+}

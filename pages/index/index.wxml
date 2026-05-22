@@ -1,0 +1,55 @@
+<view class="container {{darkMode ? 'dark-mode' : ''}}">
+  <!-- 顶部品牌区 -->
+  <view class="hero">
+    <view class="hero-icon">🎸</view>
+    <text class="hero-title">怎么学吉他</text>
+    <text class="hero-sub">你的吉他学习助手</text>
+  </view>
+
+  <!-- 暗色模式切换 -->
+  <view class="dark-toggle" bindtap="onToggleDarkMode">
+    <text>{{darkMode ? '☀️ 白天模式' : '🌙 夜间模式'}}</text>
+  </view>
+
+  <!-- 主要功能入口 -->
+  <view class="feature-cards">
+    <view class="feature-card card-chord" bindtap="onGoChord" hover-class="card-hover">
+      <view class="feature-icon">🎵</view>
+      <view class="feature-info">
+        <text class="feature-title">和弦指法查询</text>
+        <text class="feature-desc">选择和弦，查看指板按法位置，收听和弦发声</text>
+      </view>
+      <view class="feature-arrow">→</view>
+    </view>
+
+    <view class="feature-card card-tuner" bindtap="onGoTuner" hover-class="card-hover">
+      <view class="feature-icon">🎛️</view>
+      <view class="feature-info">
+        <text class="feature-title">吉他调音器</text>
+        <text class="feature-desc">实时音高检测，逐弦调准，自动切换下一弦</text>
+      </view>
+      <view class="feature-arrow">→</view>
+    </view>
+  </view>
+
+  <!-- 收藏夹 -->
+  <view class="favorites-section" wx:if="{{favoriteChords.length > 0}}">
+    <view class="fav-header">
+      <text class="fav-title">♥ 收藏的和弦</text>
+    </view>
+    <scroll-view class="fav-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{favoriteChords}}"
+        wx:for-item="fav"
+        wx:for-index="i"
+        wx:key="key"
+        class="fav-chip"
+        bindtap="onSelectFavorite"
+        data-key="{{fav.key}}"
+      >
+        <text class="fav-chip-text">{{fav.chordName}}</text>
+        <text class="fav-chip-desc">{{fav.typeName}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

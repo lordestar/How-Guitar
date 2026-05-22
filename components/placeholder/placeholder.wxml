@@ -1,0 +1,6 @@
+<view class="placeholder-wrap" style="height: {{canvasHeight}}px;">
+  <view class="placeholder-inner">
+    <text class="placeholder-icon">🎸</text>
+    <text class="placeholder-text">加载指板图中...</text>
+  </view>
+</view>

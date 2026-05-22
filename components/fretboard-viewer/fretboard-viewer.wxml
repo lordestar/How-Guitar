@@ -1,0 +1,19 @@
+<view class="fretboard-area" style="height: {{canvasHeight}}px;">
+  <!-- 左标签列（始终固定） -->
+  <view class="left-labels" style="height: {{canvasHeight}}px;">
+    <view wx:for="{{stringDetails}}" wx:for-item="sd" wx:for-index="i" wx:key="shortName" class="label-row">
+      <text class="label-string">{{sd.shortName}}</text>
+      <text class="label-indicator {{sd.indicatorClass}}">{{sd.indicator}}</text>
+    </view>
+  </view>
+
+  <!-- 可横向滑动的指板 -->
+  <scroll-view scroll-x class="fretboard-scroll" enhanced show-scrollbar="{{false}}">
+    <canvas
+      type="2d"
+      id="fretboardCanvas"
+      class="fretboard-canvas"
+      style="width: {{canvasWidth}}px; height: {{canvasHeight}}px;"
+    ></canvas>
+  </scroll-view>
+</view>

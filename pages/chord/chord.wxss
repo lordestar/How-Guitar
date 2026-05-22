@@ -1,0 +1,268 @@
+.container {
+  padding: 0 24rpx 40rpx;
+  min-height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--page-bg);
+  transition: background 0.2s;
+}
+
+/* ===== 卡片 ===== */
+.card {
+  background: var(--card-bg);
+  border-radius: 22rpx;
+  padding: 28rpx 24rpx;
+  margin-bottom: 22rpx;
+  border: 2rpx solid var(--card-border, transparent);
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.card-title {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+
+.card-badge {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 8rpx 22rpx;
+  border-radius: 14rpx;
+  transition: all 0.2s;
+}
+
+.section {
+  margin-bottom: 20rpx;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 14rpx;
+  display: block;
+  transition: color 0.2s;
+}
+
+/* ===== 根音网格 ===== */
+.root-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.root-btn {
+  width: calc(25% - 9rpx);
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface);
+  border-radius: 16rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: var(--text-primary);
+  border: 2rpx solid transparent;
+  transition: all 0.15s;
+}
+
+.root-btn.active {
+  background: var(--accent);
+  color: #FFF;
+  box-shadow: 0 4rpx 12rpx rgba(211, 47, 47, 0.3);
+  transform: scale(1.02);
+}
+
+.root-btn:active {
+  transform: scale(0.92);
+}
+
+/* ===== 和弦类型 ===== */
+.type-scroll {
+  white-space: nowrap;
+  padding-bottom: 8rpx;
+}
+
+.type-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 140rpx;
+  height: 94rpx;
+  margin-right: 14rpx;
+  background: var(--surface);
+  border-radius: 18rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.15s;
+}
+
+.type-chip.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  transform: scale(1.03);
+}
+
+.type-chip:active {
+  transform: scale(0.92);
+}
+
+.type-name {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+  transition: color 0.2s;
+}
+
+.type-chip.active .type-name {
+  color: var(--accent);
+}
+
+.type-key {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  margin-top: 4rpx;
+  transition: color 0.2s;
+}
+
+.type-chip.active .type-key {
+  color: var(--accent);
+}
+
+/* ===== 组成音预览 ===== */
+.note-preview {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: var(--card-bg);
+  border-radius: 22rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 22rpx;
+  border: 2rpx solid var(--card-border, transparent);
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s;
+}
+
+.note-preview-label {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.note-pills {
+  display: flex;
+  gap: 12rpx;
+  flex-wrap: wrap;
+}
+
+.note-pill {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: 26rpx;
+  font-weight: 700;
+  padding: 8rpx 22rpx;
+  border-radius: 22rpx;
+  transition: all 0.2s;
+}
+
+/* ===== 品数选择 ===== */
+.fret-options {
+  display: flex;
+  gap: 16rpx;
+}
+
+.fret-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 26rpx 0 22rpx;
+  background: var(--surface);
+  border-radius: 18rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.15s;
+}
+
+.fret-option.active {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.fret-option:active {
+  transform: scale(0.94);
+}
+
+.fret-num {
+  font-size: 46rpx;
+  font-weight: 800;
+  color: var(--text-primary);
+  transition: color 0.2s;
+}
+
+.fret-option.active .fret-num {
+  color: var(--accent);
+}
+
+.fret-label {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-top: 8rpx;
+  transition: color 0.2s;
+}
+
+.fret-option.active .fret-label {
+  color: var(--accent);
+}
+
+/* ===== 错误提示 ===== */
+.error-msg {
+  margin-bottom: 20rpx;
+  padding: 18rpx 22rpx;
+  background: var(--accent-light);
+  border-radius: 14rpx;
+  font-size: 24rpx;
+  color: var(--accent);
+  text-align: center;
+  transition: all 0.2s;
+}
+
+/* ===== 生成按钮 ===== */
+.generate-btn {
+  width: 100%;
+  height: 100rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50rpx;
+  font-size: 34rpx;
+  font-weight: 700;
+  border: none;
+  background: var(--btn-primary-bg, linear-gradient(135deg, #D32F2F, #F57C00));
+  color: #FFF;
+  box-shadow: var(--btn-primary-shadow, 0 8rpx 24rpx rgba(211, 47, 47, 0.3));
+  margin-top: 4rpx;
+  transition: all 0.2s;
+}
+
+.generate-btn:active {
+  transform: scale(0.96);
+  opacity: 0.9;
+}
