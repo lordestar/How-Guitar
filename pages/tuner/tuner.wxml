@@ -1,0 +1,81 @@
+<view class="page {{showPrivacy ? '' : 'ready'}}">
+  <!-- 隐私协议遮罩 -->
+  <view class="overlay" wx:if="{{showPrivacy}}">
+    <view class="dialog">
+      <text class="dialog-title">隐私说明</text>
+      <text class="dialog-body">需要使用麦克风进行吉他实时调音。音频数据仅在本地进行频率分析，不会录制、保存或上传到任何服务器。</text>
+      <view class="dialog-actions">
+        <view class="dialog-btn dialog-btn-ok" bindtap="onPrivacyAgree">同意并开始</view>
+        <view class="dialog-btn dialog-btn-cancel" bindtap="onPrivacyDeny">拒绝</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主内容 -->
+  <view class="main" wx:else>
+    <!-- 进度条：6弦~1弦 -->
+    <view class="step-bar">
+      <view wx:for="{{tuningOrder}}" wx:for-index="i" wx:key="string"
+        class="step-dot {{i < currentIndex ? 'done' : ''}} {{i === currentIndex ? 'active' : ''}}"
+        bindtap="onTapString" data-index="{{i}}">
+        <text class="step-num">{{item.string}}</text>
+      </view>
+    </view>
+
+    <!-- 弦信息 + 状态 -->
+    <view class="info-row">
+      <text class="info-name">{{currentInfo.name}}</text>
+      <text class="info-target">{{currentInfo.frequency}} Hz</text>
+    </view>
+
+    <!-- 状态标签 -->
+    <view class="status-tag {{statusClass}}">
+      <text>{{statusText}}</text>
+    </view>
+
+    <!-- Canvas 仪表盘 -->
+    <view class="gauge-box">
+      <canvas type="2d" id="gaugeCanvas" class="gauge-canvas"></canvas>
+    </view>
+
+    <!-- 频率/音名/音分 -->
+    <view class="freq-row">
+      <text class="freq-val">{{freqDisplay}}</text>
+      <text class="freq-unit" wx:if="{{freqDisplay !== '---'}}">Hz</text>
+    </view>
+    <view class="note-row {{statusClass}}">
+      <text class="note-val">{{noteDisplay}}</text>
+      <text class="note-cents" wx:if="{{centsDisplay}}">{{centsDisplay}}</text>
+    </view>
+
+    <!-- 权限拒绝 -->
+    <view class="perm-box" wx:if="{{showPermTip}}">
+      <text>需要麦克风权限才能调音</text>
+      <view class="perm-btn" bindtap="onOpenSettings">去设置</view>
+    </view>
+
+    <!-- 手动选弦按钮 -->
+    <view class="btn-row">
+      <view wx:for="{{tuningOrder}}" wx:for-index="i" wx:key="string"
+        class="str-btn {{i === currentIndex ? 'active' : ''}} {{i < currentIndex ? 'done' : ''}}"
+        bindtap="onTapString" data-index="{{i}}">
+        <text>{{item.string}}</text>
+      </view>
+    </view>
+
+    <!-- 重新开始 -->
+    <view class="restart-btn" bindtap="onRestart">↺ 重新开始</view>
+
+    <!-- 完成弹窗 -->
+    <view class="overlay" wx:if="{{showComplete}}">
+      <view class="dialog complete-dialog">
+        <text class="complete-icon">🎸</text>
+        <text class="dialog-title">全部调准!</text>
+        <text class="dialog-body">你的吉他准备好了！</text>
+        <view class="dialog-actions">
+          <view class="dialog-btn dialog-btn-ok" bindtap="onCompleteClose">太棒了</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

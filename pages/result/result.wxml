@@ -1,0 +1,100 @@
+<view class="container {{darkMode ? 'dark-mode' : ''}}">
+  <view class="result-header">
+    <view class="header-left">
+      <text class="chord-name">{{chordName}}</text>
+      <text class="chord-notes">组成音: {{chordNotes}}</text>
+    </view>
+    <view class="header-actions">
+      <!-- 收藏按钮 -->
+      <view class="action-icon-btn {{isFavorited ? 'fav-active' : ''}}" bindtap="onToggleFavorite">
+        <text>{{isFavorited ? '★' : '☆'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 指板图组件 -->
+  <view>
+    <fretboard-viewer
+      id="fretboardViewer"
+      canvasWidth="{{canvasWidth}}"
+      canvasHeight="{{canvasHeight}}"
+      stringDetails="{{stringDetails}}"
+      fingerings="{{fingerings}}"
+      maxFret="{{maxFret}}"
+      currentIndex="{{currentIndex}}"
+      bind:ready="onFretboardReady"
+    />
+  </view>
+
+  <!-- 播放/导航操作栏 -->
+  <view class="action-bar">
+    <view class="nav-group" wx:if="{{totalCount > 1}}">
+      <view class="nav-btn" bindtap="prevFingering">
+        <text>‹</text>
+      </view>
+      <text class="nav-info">{{currentIndex + 1}} / {{totalCount}}</text>
+      <view class="nav-btn" bindtap="nextFingering">
+        <text>›</text>
+      </view>
+    </view>
+    <view class="play-btn {{isPlaying ? 'playing' : ''}}" bindtap="onPlayChord">
+      <text>{{isPlaying ? '♫ 播放中' : '▶ 试听'}}</text>
+    </view>
+  </view>
+
+  <view class="fingering-title-wrap">
+    <view class="fingering-title" wx:if="{{currentFingering}}">
+      <text>{{currentFingering.name}}</text>
+    </view>
+  </view>
+
+  <!-- 和弦说明卡片 -->
+  <view class="chord-info-card" wx:if="{{chordInfo}}">
+    <view class="info-row">
+      <text class="info-label">角色</text>
+      <text class="info-value">{{chordInfo.role}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">听感</text>
+      <text class="info-value">{{chordInfo.feeling}}</text>
+    </view>
+    <view class="info-row info-row-multi" wx:if="{{chordInfo.keys}}">
+      <text class="info-label">常出现在</text>
+      <text class="info-value">{{chordInfo.keys}}</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-desc">
+      <text>{{chordInfo.function}}</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-row" wx:if="{{chordInfo.progression}}">
+      <text class="info-label">典型进行</text>
+      <text class="info-value info-prog">{{chordInfo.progression}}</text>
+    </view>
+    <view class="info-row" wx:if="{{chordInfo.songExample}}">
+      <text class="info-label">代表歌曲</text>
+      <text class="info-value info-song">{{chordInfo.songExample}}</text>
+    </view>
+  </view>
+
+  <view class="string-table" wx:if="{{currentFingering}}">
+    <view class="table-row table-header">
+      <text class="col-string">弦</text>
+      <text class="col-note">音名</text>
+      <text class="col-fret">品</text>
+      <text class="col-status">状态</text>
+    </view>
+    <view wx:for="{{stringDetails}}" wx:for-item="sd" wx:for-index="i" wx:key="shortName" class="table-row">
+      <text class="col-string">{{sd.shortName}}</text>
+      <text class="col-note {{sd.noteColor}}">{{sd.noteDisplay}}</text>
+      <text class="col-fret">{{sd.fretDisplay}}</text>
+      <text class="col-status">{{sd.statusDisplay}}</text>
+    </view>
+  </view>
+
+  <view class="action-buttons">
+    <button class="save-btn" bindtap="onSaveImage" loading="{{saving}}">
+      <text>保存图片到相册</text>
+    </button>
+  </view>
+</view>

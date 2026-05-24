@@ -1,0 +1,7 @@
+{
+  "desc": "吉他指法热力图",
+  "rules": [{
+    "action": "allow",
+    "page": "*"
+  }]
+}

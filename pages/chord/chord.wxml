@@ -1,0 +1,85 @@
+<view class="container {{darkMode ? 'dark-mode' : ''}}">
+  <!-- 和弦选择卡片 -->
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">和弦选择</text>
+      <text class="card-badge">{{selectedRoot}}{{chordTypes[selectedTypeIndex].key === 'major' ? '' : chordTypes[selectedTypeIndex].key}}</text>
+    </view>
+
+    <view class="section">
+      <text class="section-label">根音</text>
+      <view class="root-grid">
+        <view
+          wx:for="{{rootNotes}}"
+          wx:for-item="note"
+          wx:for-index="i"
+          wx:key="*this"
+          class="root-btn {{selectedRootIndex === i ? 'active' : ''}}"
+          bindtap="selectRoot"
+          data-index="{{i}}"
+        >
+          <text>{{note}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="section">
+      <text class="section-label">类型</text>
+      <scroll-view class="type-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+        <view
+          wx:for="{{chordTypes}}"
+          wx:for-item="type"
+          wx:for-index="i"
+          wx:key="key"
+          class="type-chip {{selectedTypeIndex === i ? 'active' : ''}}"
+          bindtap="selectType"
+          data-index="{{i}}"
+        >
+          <text class="type-name">{{type.name}}</text>
+          <text class="type-key">{{type.key}}</text>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view class="note-preview" wx:if="{{previewNotes}}">
+    <text class="note-preview-label">组成音</text>
+    <view class="note-pills">
+      <text wx:for="{{previewNotesArray}}" wx:for-item="n" wx:for-index="i" wx:key="*this" class="note-pill">{{n}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-header">
+      <text class="card-title">指板范围</text>
+    </view>
+    <view class="fret-options">
+      <view
+        class="fret-option {{maxFret === 5 ? 'active' : ''}}"
+        bindtap="onSetMaxFret"
+        data-fret="5"
+      >
+        <text class="fret-num">5</text>
+        <text class="fret-label">前5品</text>
+      </view>
+      <view
+        class="fret-option {{maxFret === 12 ? 'active' : ''}}"
+        bindtap="onSetMaxFret"
+        data-fret="12"
+      >
+        <text class="fret-num">12</text>
+        <text class="fret-label">前12品</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="error-msg" wx:if="{{errorMsg}}">
+    <text>{{errorMsg}}</text>
+  </view>
+
+  <button class="generate-btn" bindtap="onGenerate" loading="{{isLoading}}">
+    <text>{{isLoading ? '计算中...' : '查看指法'}}</text>
+  </button>
+
+  <view style="height: 20rpx;"></view>
+</view>

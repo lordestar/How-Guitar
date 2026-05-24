@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "指法热力图",
+  "navigationBarBackgroundColor": "#FFFFFF",
+  "navigationBarTextStyle": "black",
+  "usingComponents": {
+    "fretboard-viewer": "../../components/fretboard-viewer/fretboard-viewer",
+    "placeholder": "../../components/placeholder/placeholder"
+  },
+  "componentPlaceholder": {
+    "fretboard-viewer": "placeholder"
+  }
+}
