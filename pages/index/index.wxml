@@ -2,7 +2,7 @@
   <!-- 顶部品牌区 -->
   <view class="hero">
     <view class="hero-icon">🎸</view>
-    <text class="hero-title">怎么学吉他</text>
+    <text class="hero-title">如何吉他</text>
     <text class="hero-sub">你的吉他学习助手</text>
   </view>
 

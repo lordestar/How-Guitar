@@ -3,7 +3,7 @@ const { getChordNotes } = require('../../utils/chordDatabase');
 const { getChordFingerings } = require('../../utils/fretboard');
 
 var CHORD_TYPE_NAMES = {
-  'major': '大三', 'minor': '小三', 'm': '小三', '7': '属七',
+  'major': '大三', 'm': '小三', '7': '属七',
   'maj7': '大七', 'm7': '小七', 'dim': '减三', 'aug': '增三',
   'sus2': '挂二', 'sus4': '挂四', 'm7b5': '半减七',
   '6': '大六', 'm6': '小六', 'add9': '加九',

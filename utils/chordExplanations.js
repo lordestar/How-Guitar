@@ -378,7 +378,7 @@ var CHORD_INFO = {
 // 获取和弦说明（根据根音和类型）
 function getChordExplanation(root, type) {
   // 类型映射用
-  var typeClean = type.replace('major', '').replace('minor', 'm');
+  var typeClean = type.replace('major', '');
   var chordName = root + typeClean;
 
   // 优先查具体和弦
@@ -397,13 +397,13 @@ function getChordExplanation(root, type) {
     return {
       role: '大三和弦（Major Triad）',
       feeling: '明亮、稳定',
-      function: root + '大三和弦由根音、大三度、纯五度构成，是最基本的和弦类型。在"怎么学吉他"中学习它是理解其他和弦的基础。',
+      function: root + '大三和弦由根音、大三度、纯五度构成，是最基本的和弦类型。在"如何吉他"中学习它是理解其他和弦的基础。',
       progression: root + ' → 四度上行 → 五度下行（和弦循环）',
     };
   }
 
   // 小调三元组
-  if (type === 'minor' || type === 'm') {
+  if (type === 'm') {
     return {
       role: '小三和弦（Minor Triad）',
       feeling: '柔和、忧郁',

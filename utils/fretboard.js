@@ -244,7 +244,6 @@ function getChordFingerings(root, type, maxFret) {
   // 构建数据库查询用弦名：类型映射到数据库key
   var typeToDbKey = {
     'major': '',
-    'minor': 'm',
     'm': 'm',
     '7': '7',
     'maj7': 'maj7',

@@ -513,7 +513,6 @@ CHORD_DATABASE['Gm'] = [
 var CHORD_TYPES = {
   '':        [0, 4, 7],
   'major':   [0, 4, 7],
-  'minor':   [0, 3, 7],
   'm':       [0, 3, 7],
   '7':       [0, 4, 7, 10],
   'maj7':    [0, 4, 7, 11],
@@ -587,7 +586,7 @@ function getSmartNoteName(root, type, semi) {
   if (root.indexOf('#') >= 0) return ROOT_NOTES[idx];
   
   // 自然根音：小调/减类和弦一般用降号
-  var flatTypes = ['minor', 'm', 'm7', 'm9', 'm6', 'm7b5', 'dim', 'dim7', 'ø', '°'];
+  var flatTypes = ['m', 'm7', 'm9', 'm6', 'm7b5', 'dim', 'dim7', 'ø', '°'];
   var useFlat = false;
   for (var ft = 0; ft < flatTypes.length; ft++) {
     if (type === flatTypes[ft]) { useFlat = true; break; }

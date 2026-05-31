@@ -10,8 +10,7 @@ Page({
 
     chordTypes: [
       { key: 'major', name: '大三' },
-      { key: 'minor', name: '小三' },
-      { key: 'm', name: '小三(m)' },
+      { key: 'm', name: '小三' },
       { key: '7', name: '属七' },
       { key: 'maj7', name: '大七' },
       { key: 'm7', name: '小七' },

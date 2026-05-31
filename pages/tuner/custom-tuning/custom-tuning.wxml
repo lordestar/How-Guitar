@@ -1,0 +1,43 @@
+<view class="page">
+  <text class="section-title">调弦名称</text>
+  <input
+    class="tuning-name-input"
+    placeholder="命名你的调弦方案"
+    value="{{tuningName}}"
+    bindinput="onNameInput"
+    maxlength="20"
+  />
+
+  <view class="string-section" wx:for="{{strings}}" wx:for-index="i" wx:for-item="str" wx:key="index">
+    <view class="string-row">
+      <text class="string-label">第{{str.index}}弦</text>
+      <view class="string-picker-area">
+        <slider
+          class="string-slider"
+          min="{{str.minSemitone}}"
+          max="{{str.maxSemitone}}"
+          step="1"
+          value="{{str.currentSemitone}}"
+          bindchanging="onSliderChanging"
+          data-index="{{i}}"
+          block-size="16"
+          activeColor="#FF6B6B"
+          backgroundColor="#2E2E50"
+        />
+        <view class="string-value">
+          <text class="string-note">{{str.currentNote}}</text>
+          <text class="string-freq">{{str.currentFreq}} Hz</text>
+        </view>
+        <view class="string-warning {{str.showWarning ? 'visible' : ''}}">
+          <text class="string-warning-icon">⚠️</text>
+          <text>超出安全范围，可能导致琴弦断裂</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="btn-row">
+    <view class="btn btn-cancel" bindtap="onCancel">取消</view>
+    <view class="btn btn-save {{saveDisabled ? 'disabled' : ''}}" bindtap="onSave">保存</view>
+  </view>
+</view>

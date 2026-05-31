@@ -16,7 +16,14 @@
     "minifyWXSS": true,
     "minifyJS": true,
     "ignoreUploadUnusedFiles": true,
-    "condition": false
+    "condition": false,
+    "compileWorklet": false,
+    "uploadWithSourceMap": true,
+    "packNpmManually": false,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "swc": false,
+    "disableSWC": true
   },
   "compileType": "miniprogram",
   "simulatorPluginLibVersion": {},
@@ -25,5 +32,6 @@
     "include": []
   },
   "appid": "wx763bc9e428239fbf",
-  "editorSetting": {}
+  "editorSetting": {},
+  "libVersion": "3.7.0"
 }

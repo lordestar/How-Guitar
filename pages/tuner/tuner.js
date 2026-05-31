@@ -1,9 +1,5 @@
-// pages/tuner/tuner.js
-// 吉他调音器 v3 — 稳定版
-// 修复：滑动中位数滤波 + 连续帧稳定判定 + 噪声门限 + 指针缓动
-// 关键：frameSize: 5（5KB）确保 onFrameRecorded 触发
-
 var pitch = require('../../utils/pitch');
+var tuningPresets = require('../../utils/tuningPresets');
 
 Page({
   data: {
@@ -15,6 +11,11 @@ Page({
     currentIndex: 0,
     currentInfo: pitch.STANDARD_TUNING[0],
 
+    currentTuningId: 'standard',
+    currentTuningName: '标准调弦',
+    tuningList: [],
+    showTuningPanel: false,
+
     statusClass: 'waiting',
     statusText: '请拨动第6弦',
     freqDisplay: '---',
@@ -22,56 +23,100 @@ Page({
     centsDisplay: '',
   },
 
-  // ─── 模块变量 ───
   recMgr: null,
   isRunning: false,
   canvasCtx: null,
   _currentAngle: 0,
 
-  // 帧管理
   frameBuffer: [],
   TARGET_FRAMES: 3,
   SAMPLE_RATE: 44100,
 
-  // 滑动中位数缓冲（最近 7 帧的检测频率）
   freqHistory: [],
   MEDIAN_WINDOW: 7,
 
-  // 平滑
   smoothAngle: null,
 
-  // 稳定性计数（连续 |cents| < 5 的帧数）
   stableCount: 0,
-  STABLE_THRESHOLD: 10,  // 约 1.5 秒
+  STABLE_THRESHOLD: 10,
 
-  // 噪声门限滞后
   noiseGateOn: false,
   lastValidRms: 0,
 
-  // 拨弦提示计时
   lastDetectMs: 0,
   pluckTimer: null,
 
-  // Canvas 绘制
   drawTimer: null,
   drawAngle: 0,
 
-  // ─── 生命周期 ───
   onLoad: function () {
-    console.log('[tuner] v3 loaded');
     this.initCanvas();
+    this.loadTuningList();
+    var lastTuningId = wx.getStorageSync('lastTuningId') || 'standard';
+    this.switchTuning(lastTuningId);
   },
 
   onUnload: function () {
-    console.log('[tuner] unload');
     this.stopRec();
     if (this.drawTimer) { clearInterval(this.drawTimer); this.drawTimer = null; }
     if (this.pluckTimer) { clearInterval(this.pluckTimer); this.pluckTimer = null; }
   },
 
-  // ═════════════════════════════════════════
-  //  Canvas
-  // ═════════════════════════════════════════
+  loadTuningList: function () {
+    var presets = tuningPresets.getAllPresets();
+    var customList = wx.getStorageSync('customTunings') || [];
+    var list = presets.map(function (t) {
+      return { id: t.id, name: t.name, description: t.description, isCustom: false };
+    });
+    for (var i = 0; i < customList.length; i++) {
+      list.push(customList[i]);
+    }
+    this.setData({ tuningList: list });
+  },
+
+  switchTuning: function (tuningId) {
+    var preset = tuningPresets.getTuningById(tuningId);
+    var customList = wx.getStorageSync('customTunings') || [];
+    var customTuning = null;
+    for (var i = 0; i < customList.length; i++) {
+      if (customList[i].id === tuningId) { customTuning = customList[i]; break; }
+    }
+    var tuning = preset || customTuning;
+    if (!tuning) {
+      tuning = tuningPresets.getTuningById('standard');
+      tuningId = 'standard';
+    }
+    wx.setStorageSync('lastTuningId', tuningId);
+    this.setData({
+      currentTuningId: tuningId,
+      currentTuningName: tuning.name,
+    });
+    this.resetTuning(tuning.strings);
+  },
+
+  resetTuning: function (strings) {
+    this.stableCount = 0;
+    this.freqHistory = [];
+    this.frameBuffer = [];
+    this.drawAngle = 0;
+    this._currentAngle = 0;
+    this.smoothAngle = null;
+    this.currentTuningStrings = strings;
+    this.setData({
+      tuningOrder: strings,
+      currentIndex: 0,
+      currentInfo: strings[0],
+      statusClass: 'waiting',
+      statusText: '请拨动第' + strings[0].string + '弦',
+      freqDisplay: '---',
+      noteDisplay: '',
+      centsDisplay: '',
+    });
+    if (!this.isRunning) {
+      this.startRec();
+    }
+  },
+
   initCanvas: function () {
     var self = this;
     wx.createSelectorQuery().select('#gaugeCanvas').fields({ node: true, size: true }).exec(function (r) {
@@ -97,7 +142,6 @@ Page({
 
     ctx.clearRect(0, 0, W, H);
 
-    // 指针缓动
     var target = this.drawAngle || 0;
     this._currentAngle = (this._currentAngle || 0) + (target - (this._currentAngle || 0)) * 0.18;
 
@@ -108,11 +152,9 @@ Page({
     ctx.fillStyle = '#1A1A34'; ctx.fill();
     ctx.shadowBlur = 0;
 
-    // 轨道
     ctx.beginPath(); ctx.arc(cx, cy, R - 5, sA, eA);
     ctx.strokeStyle = '#2A2A50'; ctx.lineWidth = 9; ctx.lineCap = 'round'; ctx.stroke();
 
-    // 渐变弧
     for (var i = 0; i < 80; i++) {
       var t = i / 80, a = sA + t * (eA - sA), na = sA + (i + 1) / 80 * (eA - sA);
       var c = t < 0.15 ? '#FF7733' : t < 0.30 ? '#DDBB33' : t < 0.50 ? '#4CAF50' : t < 0.70 ? '#4CAF50' : t < 0.85 ? '#EE6644' : '#FF5555';
@@ -120,7 +162,6 @@ Page({
       ctx.strokeStyle = c; ctx.lineWidth = 5; ctx.stroke();
     }
 
-    // 刻度
     for (var ti = 0; ti < 21; ti++) {
       var tv = ti / 20, aa = sA + tv * (eA - sA);
       var isC = ti === 10, isM = ti % 5 === 0;
@@ -132,7 +173,6 @@ Page({
       ctx.strokeStyle = isC ? '#4CAF50' : '#3A3A5A'; ctx.lineWidth = tW; ctx.lineCap = 'round'; ctx.stroke();
     }
 
-    // 指针
     var ptr = this._currentAngle || 0;
     var ptrR = sA + ((ptr + 90) / 180) * (eA - sA);
     ptrR = Math.max(sA, Math.min(eA, ptrR));
@@ -156,7 +196,6 @@ Page({
     ctx.beginPath(); ctx.arc(cx, cy, 3, 0, Math.PI * 2);
     ctx.fillStyle = '#1A1A34'; ctx.fill();
 
-    // 文字
     ctx.fillStyle = '#A09888'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
     ctx.fillText('第' + this.data.currentInfo.string + '弦', cx, cy + R - 38);
     ctx.fillStyle = '#706868'; ctx.font = '12px sans-serif';
@@ -171,9 +210,6 @@ Page({
     }
   },
 
-  // ═════════════════════════════════════════
-  //  隐私 & 权限
-  // ═════════════════════════════════════════
   onPrivacyAgree: function () {
     this.setData({ showPrivacy: false });
     this.requestMic();
@@ -207,14 +243,11 @@ Page({
     });
   },
 
-  // ═════════════════════════════════════════
-  //  录音（frameSize: 5 KB 是触发 onFrameRecorded 的关键）
-  // ═════════════════════════════════════════
   startRec: function () {
     var self = this;
     try { self.recMgr = wx.getRecorderManager(); } catch (e) { return; }
 
-    self.recMgr.onStart(function () { self.isRunning = true; console.log('[rec] STARTED'); });
+    self.recMgr.onStart(function () { self.isRunning = true; });
     self.recMgr.onError(function (e) { console.error('[rec] ERROR', JSON.stringify(e)); });
 
     self.recMgr.onFrameRecorded(function (res) {
@@ -225,16 +258,10 @@ Page({
         var int16 = new Int16Array(buf);
         var float32 = new Float32Array(int16.length);
 
-        // 计算峰值音量
-        var peak = 0;
         for (var i = 0; i < int16.length; i++) {
-          var v = int16[i] / 32768;
-          float32[i] = v;
-          var a = v < 0 ? -v : v;
-          if (a > peak) peak = a;
+          float32[i] = int16[i] / 32768;
         }
 
-        // 累积帧缓冲
         self.frameBuffer.push(float32);
         if (self.frameBuffer.length > self.TARGET_FRAMES) self.frameBuffer.shift();
 
@@ -245,8 +272,8 @@ Page({
           var off = 0;
           for (var k = 0; k < self.frameBuffer.length; k++) { merged.set(self.frameBuffer[k], off); off += self.frameBuffer[k].length; }
 
-          // 音高检测
-          var result = pitch.detectPitch(merged, self.SAMPLE_RATE);
+          var targetTunings = self.currentTuningStrings || self.data.tuningOrder;
+          var result = pitch.detectPitch(merged, self.SAMPLE_RATE, targetTunings);
           self.onPitch(result, merged.length);
         }
       } catch (e) { console.error('[rec] frame err', e); }
@@ -257,7 +284,6 @@ Page({
       encodeBitRate: 64000, format: 'pcm', frameSize: 5,
     });
 
-    // 拨弦提示
     self.lastDetectMs = Date.now();
     self.pluckTimer = setInterval(function () {
       if (!self.isRunning) { clearInterval(self.pluckTimer); return; }
@@ -279,15 +305,11 @@ Page({
     try { if (this.recMgr) this.recMgr.stop(); } catch (e) {}
   },
 
-  // ═════════════════════════════════════════
-  //  音高结果处理（核心修复）
-  // ═════════════════════════════════════════
   onPitch: function (result, frameLen) {
     if (!this.isRunning) return;
     this.lastDetectMs = Date.now();
 
     if (!result || !result.frequency || result.confidence < 0.25) {
-      // 没检测到声音或置信度太低
       if (this.smoothAngle !== null) {
         this.drawAngle = pitch.smoothEMA(0, this.drawAngle, 0.05);
         if (Math.abs(this.drawAngle) < 1) this.drawAngle = 0;
@@ -298,7 +320,6 @@ Page({
     var freq = result.frequency;
     var conf = result.confidence;
 
-    // ── 滑动中位数滤波 ──
     this.freqHistory.push(freq);
     if (this.freqHistory.length > this.MEDIAN_WINDOW) this.freqHistory.shift();
 
@@ -307,16 +328,13 @@ Page({
       smoothFreq = pitch.medianOfBuffer(this.freqHistory);
     }
 
-    // ── 计算偏差 ──
     var target = this.data.currentInfo;
     var cents = pitch.calcCents(smoothFreq, target.frequency);
     var angle = pitch.centsToAngle(cents);
 
-    // ── EMA 平滑指针 ──
     this.drawAngle = pitch.smoothEMA(angle, this.drawAngle, 0.30);
     this.smoothAngle = this.drawAngle;
 
-    // ── 判定状态 ──
     var state = '', text = '';
     var centStr = (cents > 0 ? '+' : '') + cents.toFixed(1) + '¢';
     var isMatched = Math.abs(cents) < 5;
@@ -339,13 +357,6 @@ Page({
       this.stableCount = 0;
     }
 
-    // 日志输出
-    console.log('[tuner] raw=' + freq.toFixed(1) + ' smooth=' + smoothFreq.toFixed(1)
-      + ' target=' + target.frequency + 'Hz cents=' + cents.toFixed(1)
-      + ' stable=' + this.stableCount + '/' + this.STABLE_THRESHOLD
-      + ' conf=' + conf.toFixed(2));
-
-    // ── 更新 UI ──
     this.setData({
       statusClass: state,
       statusText: text,
@@ -354,27 +365,20 @@ Page({
       centsDisplay: centStr,
     });
 
-    // ── 稳定后自动切弦 ──
     if (isMatched && this.stableCount >= this.STABLE_THRESHOLD) {
       this.onStringDone();
     }
   },
 
-  // ═════════════════════════════════════════
-  //  弦调准处理
-  // ═════════════════════════════════════════
   onStringDone: function () {
     this.stableCount = 0;
     this.freqHistory = [];
     this.frameBuffer = [];
 
     var idx = this.data.currentIndex;
-    console.log('[tuner] String ' + this.data.currentInfo.string + ' TUNED!');
-
     try { wx.vibrateShort({ type: 'light' }); } catch (e) {}
 
     if (idx >= 5) {
-      console.log('[tuner] ALL STRINGS DONE!');
       setTimeout(function () { try { wx.vibrateShort({ type: 'medium' }); } catch (e) {} }, 300);
       this.setData({ showComplete: true });
       return;
@@ -395,9 +399,6 @@ Page({
     this.smoothAngle = null;
   },
 
-  // ═════════════════════════════════════════
-  //  用户交互
-  // ═════════════════════════════════════════
   onTapString: function (e) {
     var idx = parseInt(e.currentTarget.dataset.index, 10);
     if (idx === this.data.currentIndex) return;
@@ -430,4 +431,48 @@ Page({
     this.setData({ showComplete: false });
     this.resetState(0);
   },
+
+  onToggleTuningPanel: function () {
+    this.setData({ showTuningPanel: !this.data.showTuningPanel });
+  },
+
+  onSelectTuning: function (e) {
+    var id = e.currentTarget.dataset.id;
+    if (id === this.data.currentTuningId) {
+      this.setData({ showTuningPanel: false });
+      return;
+    }
+    this.setData({ showTuningPanel: false });
+    this.switchTuning(id);
+  },
+
+  onAddCustom: function () {
+    this.setData({ showTuningPanel: false });
+    wx.navigateTo({ url: '/pages/tuner/custom-tuning/custom-tuning' });
+  },
+
+  onDeleteCustomTuning: function (e) {
+    var id = e.currentTarget.dataset.id;
+    var self = this;
+    wx.showModal({
+      title: '删除调弦',
+      content: '确定要删除该自定义调弦吗？',
+      success: function (res) {
+        if (res.confirm) {
+          var customList = wx.getStorageSync('customTunings') || [];
+          var newList = [];
+          for (var i = 0; i < customList.length; i++) {
+            if (customList[i].id !== id) newList.push(customList[i]);
+          }
+          wx.setStorageSync('customTunings', newList);
+          if (self.data.currentTuningId === id) {
+            self.switchTuning('standard');
+          }
+          self.loadTuningList();
+        }
+      },
+    });
+  },
+
+  noop: function () {},
 });

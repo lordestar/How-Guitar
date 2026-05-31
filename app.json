@@ -3,11 +3,12 @@
     "pages/index/index",
     "pages/chord/chord",
     "pages/result/result",
-    "pages/tuner/tuner"
+    "pages/tuner/tuner",
+    "pages/tuner/custom-tuning/custom-tuning"
   ],
   "window": {
     "navigationBarBackgroundColor": "#FFFFFF",
-    "navigationBarTitleText": "怎么学吉他",
+    "navigationBarTitleText": "如何吉他",
     "navigationBarTextStyle": "black"
   },
   "sitemapLocation": "sitemap.json",

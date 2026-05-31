@@ -1,0 +1,119 @@
+.page {
+  min-height: 100vh;
+  background: #14142A;
+  padding: 20rpx 32rpx 40rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.section-title {
+  font-size: 28rpx;
+  font-weight: 800;
+  color: #F0EBE0;
+  margin-bottom: 16rpx;
+}
+
+.tuning-name-input {
+  width: 100%;
+  height: 80rpx;
+  background: #1E1E3A;
+  border: 2rpx solid #2E2E50;
+  border-radius: 16rpx;
+  padding: 0 24rpx;
+  font-size: 26rpx;
+  color: #F0EBE0;
+  box-sizing: border-box;
+  margin-bottom: 32rpx;
+}
+.tuning-name-input::placeholder {
+  color: #555;
+}
+
+.string-section {
+  margin-bottom: 6rpx;
+}
+
+.string-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #2A2A48;
+}
+
+.string-label {
+  width: 120rpx;
+  font-size: 24rpx;
+  color: #706868;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.string-picker-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.string-slider {
+  width: 100%;
+}
+
+.string-value {
+  font-size: 22rpx;
+  color: #F0EBE0;
+  display: flex;
+  justify-content: space-between;
+}
+.string-note {
+  font-weight: 700;
+  color: #4CAF50;
+}
+.string-freq {
+  color: #706868;
+}
+
+.string-warning {
+  font-size: 18rpx;
+  color: #FF6B6B;
+  margin-top: 2rpx;
+  display: none;
+}
+.string-warning.visible {
+  display: block;
+}
+
+.string-warning-icon {
+  font-size: 22rpx;
+  margin-right: 4rpx;
+}
+
+.btn-row {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 48rpx;
+}
+
+.btn {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+}
+
+.btn-cancel {
+  background: #333358;
+  color: #A09888;
+}
+
+.btn-save {
+  background: #FF6B6B;
+  color: #FFF;
+}
+
+.btn-save.disabled {
+  opacity: 0.4;
+}

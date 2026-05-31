@@ -18,14 +18,14 @@
       <view wx:for="{{tuningOrder}}" wx:for-index="i" wx:key="string"
         class="step-dot {{i < currentIndex ? 'done' : ''}} {{i === currentIndex ? 'active' : ''}}"
         bindtap="onTapString" data-index="{{i}}">
-        <text class="step-num">{{item.string}}</text>
+        <text class="step-num">{{item.note}}</text>
       </view>
     </view>
 
     <!-- 弦信息 + 状态 -->
     <view class="info-row">
       <text class="info-name">{{currentInfo.name}}</text>
-      <text class="info-target">{{currentInfo.frequency}} Hz</text>
+      <text class="info-target">{{currentTuningName}} · {{currentInfo.frequency}} Hz</text>
     </view>
 
     <!-- 状态标签 -->
@@ -66,14 +66,50 @@
     <!-- 重新开始 -->
     <view class="restart-btn" bindtap="onRestart">↺ 重新开始</view>
 
+    <!-- 调音方式切换按钮（右下角） -->
+    <view class="tuning-switch-btn" bindtap="onToggleTuningPanel">⚙️</view>
+
     <!-- 完成弹窗 -->
     <view class="overlay" wx:if="{{showComplete}}">
       <view class="dialog complete-dialog">
         <text class="complete-icon">🎸</text>
-        <text class="dialog-title">全部调准!</text>
+        <text class="dialog-title">{{currentTuningName}}全部调准!</text>
         <text class="dialog-body">你的吉他准备好了！</text>
         <view class="dialog-actions">
           <view class="dialog-btn dialog-btn-ok" bindtap="onCompleteClose">太棒了</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 调音方式选择面板 -->
+    <view class="tuning-overlay {{showTuningPanel ? 'active' : ''}}" bindtap="onToggleTuningPanel">
+      <view class="tuning-panel {{showTuningPanel ? 'active' : ''}}" catchtap="noop">
+        <view class="tuning-panel-header">
+          <text class="tuning-panel-title">选择调音方式</text>
+          <text class="tuning-panel-close" bindtap="onToggleTuningPanel">✕</text>
+        </view>
+        <scroll-view class="tuning-panel-list" scroll-y>
+          <view
+            wx:for="{{tuningList}}"
+            wx:for-item="tuning"
+            wx:for-index="i"
+            wx:key="id"
+            class="tuning-item {{tuning.id === currentTuningId ? 'active' : ''}} {{tuning.isCustom ? 'custom' : ''}}"
+            bindtap="onSelectTuning" data-id="{{tuning.id}}"
+          >
+            <view class="tuning-item-left">
+              <text class="tuning-item-name">{{tuning.name}}</text>
+              <text class="tuning-item-desc">{{tuning.description}}</text>
+            </view>
+            <view class="tuning-item-right">
+              <text class="tuning-item-check" wx:if="{{tuning.id === currentTuningId}}">✓</text>
+              <text class="tuning-item-delete" wx:if="{{tuning.isCustom}}" bindtap="onDeleteCustomTuning" data-id="{{tuning.id}}" catchtap="onDeleteCustomTuning">🗑️</text>
+            </view>
+          </view>
+        </scroll-view>
+        <view class="tuning-panel-add" bindtap="onAddCustom">
+          <text class="tuning-add-icon">+</text>
+          <text class="tuning-add-text">自定义调弦</text>
         </view>
       </view>
     </view>
