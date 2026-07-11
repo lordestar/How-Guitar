@@ -59,22 +59,25 @@ Page({
     var favList = wx.getStorageSync('favoriteChords') || [];
     var isFavorited = favList.indexOf(favoriteKey) >= 0;
 
-    this.setData({
-      chordName: resultData.chordName,
-      chordNotes: resultData.chordNotes ? resultData.chordNotes.join(' · ') : '',
-      chordRoot: chordRoot,
-      chordType: chordType,
-      maxFret: maxFret,
-      fingerings: fingerings,
-      totalCount: fingerings.length,
-      canvasWidth: cWidth,
-      canvasHeight: cHeight,
-      chordInfo: chordInfo,
-      favoriteKey: favoriteKey,
-      isFavorited: isFavorited,
-    }, function () {
-      this.showFingering(0);
-    });
+    this.setData(
+      {
+        chordName: resultData.chordName,
+        chordNotes: resultData.chordNotes ? resultData.chordNotes.join(' · ') : '',
+        chordRoot: chordRoot,
+        chordType: chordType,
+        maxFret: maxFret,
+        fingerings: fingerings,
+        totalCount: fingerings.length,
+        canvasWidth: cWidth,
+        canvasHeight: cHeight,
+        chordInfo: chordInfo,
+        favoriteKey: favoriteKey,
+        isFavorited: isFavorited,
+      },
+      function () {
+        this.showFingering(0);
+      }
+    );
   },
 
   onUnload: function () {
@@ -126,15 +129,19 @@ Page({
         var st = strings[i];
         var isChordNote = st.note !== null;
         var isMuted = st.fret === 'x';
-        var isOpen = (st.fret === 0 || st.fret === '0');
+        var isOpen = st.fret === 0 || st.fret === '0';
         details.push({
           shortName: SHORT_NAMES[5 - i],
-          indicator: isMuted ? '✕' : (isOpen ? '○' : ''),
-          indicatorClass: isMuted ? 'indicator-muted' : (isOpen ? 'indicator-open' : 'indicator-none'),
+          indicator: isMuted ? '✕' : isOpen ? '○' : '',
+          indicatorClass: isMuted
+            ? 'indicator-muted'
+            : isOpen
+              ? 'indicator-open'
+              : 'indicator-none',
           noteDisplay: isChordNote ? st.note : '—',
           noteColor: isChordNote ? 'chord-note' : 'muted',
           fretDisplay: st.fret === 'x' ? '✕' : String(st.fret),
-          statusDisplay: isMuted ? '不弹' : (isOpen ? '空弦' : '按' + st.fret + '品'),
+          statusDisplay: isMuted ? '不弹' : isOpen ? '空弦' : '按' + st.fret + '品',
         });
       }
     }
@@ -169,10 +176,13 @@ Page({
     if (!fingering || !fingering.strings) return;
 
     this.setData({ isPlaying: true });
-    audioEngine.playChord(fingering.strings, function () {
-      // 播放结束回调
-      this.setData({ isPlaying: false });
-    }.bind(this));
+    audioEngine.playChord(
+      fingering.strings,
+      function () {
+        // 播放结束回调
+        this.setData({ isPlaying: false });
+      }.bind(this)
+    );
   },
 
   // === 收藏功能 ===
@@ -202,11 +212,14 @@ Page({
     self.setData({ saving: true });
     var viewer = this.selectComponent('#fretboardViewer');
     if (viewer && viewer.saveToAlbum) {
-      viewer.saveToAlbum().then(function () {
-        self.setData({ saving: false });
-      }).catch(function () {
-        self.setData({ saving: false });
-      });
+      viewer
+        .saveToAlbum()
+        .then(function () {
+          self.setData({ saving: false });
+        })
+        .catch(function () {
+          self.setData({ saving: false });
+        });
     } else {
       wx.showToast({ title: '组件未就绪', icon: 'none' });
       self.setData({ saving: false });

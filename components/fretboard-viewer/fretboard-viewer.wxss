@@ -3,9 +3,9 @@
   flex-direction: row;
   background: var(--surface);
   overflow: hidden;
-  border-radius: 18rpx;
+  border-radius: var(--radius-md);
   border: 2rpx solid var(--card-border);
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow-md);
   margin-bottom: 16rpx;
   transition: all 0.2s;
 }
@@ -33,7 +33,7 @@
 }
 
 .label-string {
-  font-size: 24rpx;
+  font-size: var(--font-sm);
   font-weight: 700;
   color: var(--label-color);
   line-height: 1.2;
@@ -41,7 +41,7 @@
 }
 
 .label-indicator {
-  font-size: 22rpx;
+  font-size: var(--font-xs);
   font-weight: 700;
   line-height: 1.2;
   margin-top: 2rpx;
@@ -54,7 +54,7 @@
 }
 
 .label-indicator.indicator-open {
-  color: #2E7D32;
+  color: var(--tuner-success, #4CAF50);
   font-size: 24rpx;
 }
 

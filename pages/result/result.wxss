@@ -6,7 +6,6 @@
   transition: background 0.2s;
 }
 
-/* 结果头部 */
 .result-header {
   display: flex;
   align-items: flex-start;
@@ -30,36 +29,57 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 42rpx;
-  color: var(--text-light);
+  font-size: 48rpx;
+  color: var(--text-tertiary);
   border-radius: 50%;
-  transition: all 0.15s;
+  transition: all 0.2s;
 }
 
 .action-icon-btn:active {
   transform: scale(0.8);
 }
 
-.action-icon-btn.fav-active {
+.fav-heart {
+  font-size: 48rpx;
+  color: var(--text-tertiary);
+  transition: all 0.2s;
+}
+
+.action-icon-btn.fav-active .fav-heart {
   color: var(--accent);
+  transform: scale(1.15);
 }
 
 .chord-name {
-  font-size: 44rpx;
+  font-size: 52rpx;
   font-weight: 800;
   color: var(--text-primary);
+  letter-spacing: 2rpx;
   transition: color 0.2s;
 }
 
-.chord-notes {
-  font-size: 24rpx;
-  color: var(--text-secondary);
-  margin-top: 6rpx;
-  display: block;
-  transition: color 0.2s;
+.chord-notes-pills {
+  display: flex;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+  margin-top: var(--space-xs);
 }
 
-/* ===== 操作栏 ===== */
+.notes-pill {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  padding: 6rpx 20rpx;
+  border-radius: 20rpx;
+  box-shadow: inset 0 2rpx 4rpx rgba(0, 0, 0, 0.05);
+}
+
+.notes-pill-root {
+  background: var(--accent);
+  color: #FFF;
+}
+
 .action-bar {
   display: flex;
   align-items: center;
@@ -113,7 +133,7 @@
   font-size: 26rpx;
   font-weight: 600;
   color: #FFF;
-  box-shadow: var(--play-btn-shadow);
+  box-shadow: 0 4rpx 16rpx rgba(211, 47, 47, 0.2), 0 8rpx 24rpx rgba(211, 47, 47, 0.1);
   transition: all 0.2s;
 }
 
@@ -124,9 +144,18 @@
 .play-btn.playing {
   background: var(--play-btn-active-bg);
   box-shadow: var(--play-btn-active-shadow);
+  animation: playPulse 1.5s ease-in-out infinite;
 }
 
-/* ===== 指法名称胶囊 ===== */
+@keyframes playPulse {
+  0%, 100% {
+    box-shadow: 0 4rpx 16rpx rgba(46, 125, 50, 0.2);
+  }
+  50% {
+    box-shadow: 0 4rpx 24rpx rgba(46, 125, 50, 0.4);
+  }
+}
+
 .fingering-title-wrap {
   display: flex;
   justify-content: center;
@@ -146,7 +175,10 @@
   transition: all 0.2s;
 }
 
-/* ===== 和弦说明卡片 ===== */
+.fingering-title-bordered {
+  border: 2rpx solid var(--accent-light);
+}
+
 .chord-info-card {
   background: var(--card-bg);
   border-radius: 18rpx;
@@ -160,12 +192,21 @@
 
 .info-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   margin-bottom: 12rpx;
 }
 
 .info-row-multi {
   flex-wrap: wrap;
+}
+
+.info-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  margin-right: 12rpx;
 }
 
 .info-label {
@@ -187,7 +228,7 @@
 }
 
 .info-prog {
-  font-family: 'Courier New', monospace;
+  font-family: 'Menlo', 'Courier New', monospace;
   font-weight: 500;
   color: var(--accent);
   background: var(--accent-light);
@@ -197,14 +238,12 @@
 }
 
 .info-song {
-  color: #2E7D32;
+  font-style: italic;
 }
 
-.info-divider {
-  height: 2rpx;
-  background: var(--divider);
+.info-divider-dashed {
+  border-top: 2rpx dashed var(--divider);
   margin: 16rpx 0;
-  transition: background 0.2s;
 }
 
 .info-desc {
@@ -214,7 +253,6 @@
   transition: color 0.2s;
 }
 
-/* ===== 弦位详情表 ===== */
 .string-table {
   background: var(--card-bg);
   border-radius: 18rpx;
@@ -235,6 +273,10 @@
 
 .table-row:last-child {
   border-bottom: none;
+}
+
+.table-row-alt {
+  background: var(--surface);
 }
 
 .table-header {
@@ -284,7 +326,27 @@
   transition: color 0.2s;
 }
 
-/* 按钮 */
+.status-dot {
+  width: 10rpx;
+  height: 10rpx;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8rpx;
+  vertical-align: middle;
+}
+
+.status-dot.status-muted {
+  background: var(--accent);
+}
+
+.status-dot.status-open {
+  background: var(--tuner-success, #4CAF50);
+}
+
+.status-dot.status-fretted {
+  background: var(--accent-secondary, #F57C00);
+}
+
 .action-buttons {
   margin-top: 6rpx;
 }
@@ -295,17 +357,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 40rpx;
+  border-radius: var(--radius-lg);
   font-size: 28rpx;
   font-weight: 600;
   border: none;
   color: #FFF;
   background: var(--save-btn-bg);
-  box-shadow: 0 4rpx 16rpx rgba(211, 47, 47, 0.2);
+  box-shadow: 0 4rpx 16rpx rgba(211, 47, 47, 0.2), 0 8rpx 32rpx rgba(211, 47, 47, 0.15);
   transition: all 0.2s;
 }
 
 .save-btn:active {
   opacity: 0.85;
   transform: scale(0.97);
+}
+
+.btn-gradient {
+  background: var(--btn-primary-bg);
+  box-shadow: var(--btn-primary-shadow);
 }

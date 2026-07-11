@@ -1,4 +1,4 @@
-<view class="page {{showPrivacy ? '' : 'ready'}}">
+<view class="page {{darkMode ? 'dark-mode' : ''}} {{showPrivacy ? '' : 'ready'}}">
   <!-- 隐私协议遮罩 -->
   <view class="overlay" wx:if="{{showPrivacy}}">
     <view class="dialog">
@@ -13,7 +13,7 @@
 
   <!-- 主内容 -->
   <view class="main" wx:else>
-    <!-- 进度条：6弦~1弦 -->
+    <view class="auto-switch-bar"><view class="auto-switch-toggle {{autoSwitch ? 'on' : 'off'}}" bindtap="onToggleAutoSwitch"><text class="auto-switch-icon">{{autoSwitch ? '⏭' : '⏸'}}</text><text class="auto-switch-label">{{autoSwitch ? '自动切弦' : '手动模式'}}</text></view></view>`n    <!-- 进度条：6弦~1弦 -->
     <view class="step-bar">
       <view wx:for="{{tuningOrder}}" wx:for-index="i" wx:key="string"
         class="step-dot {{i < currentIndex ? 'done' : ''}} {{i === currentIndex ? 'active' : ''}}"
@@ -71,7 +71,7 @@
 
     <!-- 完成弹窗 -->
     <view class="overlay" wx:if="{{showComplete}}">
-      <view class="dialog complete-dialog">
+      <view class="dialog complete-dialog complete-dialog-anim">
         <text class="complete-icon">🎸</text>
         <text class="dialog-title">{{currentTuningName}}全部调准!</text>
         <text class="dialog-body">你的吉他准备好了！</text>

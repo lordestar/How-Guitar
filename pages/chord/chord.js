@@ -29,8 +29,6 @@ Page({
     ],
     selectedTypeIndex: 0,
 
-    maxFret: 5,
-
     previewNotes: '',
     previewNotesArray: [],
     errorMsg: '',
@@ -39,17 +37,20 @@ Page({
   },
 
   onLoad() {
-    var darkMode = wx.getStorageSync('darkMode') || false;
+    const darkMode = wx.getStorageSync('darkMode') || false;
     this.setData({ darkMode: darkMode });
     this.syncNavBarColor(darkMode);
 
-    // 处理从首页收藏夹跳转过来的参数
-    var fav = wx.getStorageSync('selectedFavorite');
+    const fav = getApp().globalData.selectedFavorite;
+  getApp().globalData.selectedFavorite = null;  // consume once
     if (fav && fav.root) {
-      var rootIdx = this.data.rootNotes.indexOf(fav.root);
-      var typeIdx = -1;
-      for (var i = 0; i < this.data.chordTypes.length; i++) {
-        if (this.data.chordTypes[i].key === fav.type) { typeIdx = i; break; }
+      const rootIdx = this.data.rootNotes.indexOf(fav.root);
+      let typeIdx = -1;
+      for (let i = 0; i < this.data.chordTypes.length; i++) {
+        if (this.data.chordTypes[i].key === fav.type) {
+          typeIdx = i;
+          break;
+        }
       }
       if (rootIdx >= 0 && typeIdx >= 0) {
         this.setData({
@@ -58,14 +59,13 @@ Page({
           selectedTypeIndex: typeIdx,
         });
       }
-      wx.removeStorageSync('selectedFavorite');
     }
 
     this.updatePreview();
   },
 
   onShow: function () {
-    var darkMode = wx.getStorageSync('darkMode') || false;
+    const darkMode = wx.getStorageSync('darkMode') || false;
     if (darkMode !== this.data.darkMode) {
       this.setData({ darkMode: darkMode });
       this.syncNavBarColor(darkMode);
@@ -79,49 +79,43 @@ Page({
     });
   },
 
-  selectRoot: function(e) {
-    var index = parseInt(e.currentTarget.dataset.index, 10);
+  selectRoot: function (e) {
+    const index = parseInt(e.currentTarget.dataset.index, 10);
     this.setData({ selectedRoot: this.data.rootNotes[index], selectedRootIndex: index });
     this.updatePreview();
   },
 
-  selectType: function(e) {
-    var index = parseInt(e.currentTarget.dataset.index, 10);
+  selectType: function (e) {
+    const index = parseInt(e.currentTarget.dataset.index, 10);
     this.setData({ selectedTypeIndex: index });
     this.updatePreview();
   },
 
-  onSetMaxFret: function(e) {
-    var fret = parseInt(e.currentTarget.dataset.fret, 10);
-    this.setData({ maxFret: fret });
-  },
-
-  updatePreview: function() {
-    var root = this.data.selectedRoot;
-    var type = this.data.chordTypes[this.data.selectedTypeIndex].key;
-    var info = getChordNotes(root, type);
+  updatePreview: function () {
+    const root = this.data.selectedRoot;
+    const type = this.data.chordTypes[this.data.selectedTypeIndex].key;
+    const info = getChordNotes(root, type);
     if (info.error) {
       this.setData({ previewNotes: '', previewNotesArray: [], errorMsg: info.error });
     } else {
       this.setData({
-        previewNotes: info.notes.join(' · '),
+        previewNotes: info.notes.join(' / '),
         previewNotesArray: info.notes,
         errorMsg: '',
       });
     }
   },
 
-  onGenerate: function() {
-    var root = this.data.selectedRoot;
-    var type = this.data.chordTypes[this.data.selectedTypeIndex].key;
-    var maxFret = this.data.maxFret;
+  onGenerate: function () {
+    const root = this.data.selectedRoot;
+    const type = this.data.chordTypes[this.data.selectedTypeIndex].key;
 
     this.setData({ isLoading: true, errorMsg: '' });
 
-    var self = this;
-    setTimeout(function() {
+    const self = this;
+    setTimeout(function () {
       try {
-        var result = getChordFingerings(root, type, maxFret);
+        const result = getChordFingerings(root, type);
         if (result.error) {
           self.setData({ errorMsg: result.error, isLoading: false });
           return;
@@ -131,6 +125,7 @@ Page({
           return;
         }
 
+        getApp().globalData.fingeringResult = result;
         wx.setStorageSync('currentFingeringResult', result);
         self.setData({ isLoading: false });
 

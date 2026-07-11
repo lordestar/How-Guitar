@@ -3,9 +3,9 @@
   align-items: center;
   justify-content: center;
   background: var(--surface);
-  border-radius: 18rpx;
+  border-radius: var(--radius-md);
   border: 2rpx solid var(--card-border);
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--shadow-md);
   margin-bottom: 16rpx;
   transition: all 0.2s;
 }
@@ -19,10 +19,21 @@
 
 .placeholder-icon {
   font-size: 52rpx;
+  animation: placeholderPulse 1.5s ease-in-out infinite;
 }
 
 .placeholder-text {
-  font-size: 24rpx;
+  font-size: var(--font-sm);
   color: var(--text-secondary);
   transition: color 0.2s;
+  animation: placeholderPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes placeholderPulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
 }

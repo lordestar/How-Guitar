@@ -1,12 +1,12 @@
-var NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const NOTE_NAMES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 function semitoneToFreq(semitone) {
   return 440 * Math.pow(2, (semitone - 69) / 12);
 }
 
 function semitoneToNote(semitone) {
-  var noteIndex = ((semitone % 12) + 12) % 12;
-  var octave = Math.floor(semitone / 12) - 1;
+  const noteIndex = ((semitone % 12) + 12) % 12;
+  const octave = Math.floor(semitone / 12) - 1;
   return NOTE_NAMES[noteIndex] + octave;
 }
 
@@ -19,7 +19,7 @@ function makeString(stringIndex, semitone) {
   };
 }
 
-var PRESET_TUNINGS = [
+const PRESET_TUNINGS = [
   {
     id: 'standard',
     name: '标准调弦',
@@ -120,7 +120,7 @@ var PRESET_TUNINGS = [
   },
 ];
 
-var STRING_SAFE_RANGE = [
+const STRING_SAFE_RANGE = [
   { string: 6, standardSemitone: 40, minSemitone: 35, maxSemitone: 43 },
   { string: 5, standardSemitone: 45, minSemitone: 40, maxSemitone: 48 },
   { string: 4, standardSemitone: 50, minSemitone: 45, maxSemitone: 51 },
@@ -130,7 +130,7 @@ var STRING_SAFE_RANGE = [
 ];
 
 function getTuningById(id) {
-  for (var i = 0; i < PRESET_TUNINGS.length; i++) {
+  for (let i = 0; i < PRESET_TUNINGS.length; i++) {
     if (PRESET_TUNINGS[i].id === id) return PRESET_TUNINGS[i];
   }
   return null;
@@ -142,15 +142,15 @@ function getAllPresets() {
 
 function isNoteInSafeRange(stringIndex, semitone) {
   if (stringIndex < 1 || stringIndex > 6) return false;
-  var range = STRING_SAFE_RANGE[6 - stringIndex];
+  const range = STRING_SAFE_RANGE[6 - stringIndex];
   return semitone >= range.minSemitone && semitone <= range.maxSemitone;
 }
 
 function getValidSemitonesForString(stringIndex) {
   if (stringIndex < 1 || stringIndex > 6) return [];
-  var range = STRING_SAFE_RANGE[6 - stringIndex];
-  var result = [];
-  for (var s = range.minSemitone; s <= range.maxSemitone; s++) {
+  const range = STRING_SAFE_RANGE[6 - stringIndex];
+  const result = [];
+  for (let s = range.minSemitone; s <= range.maxSemitone; s++) {
     result.push(s);
   }
   return result;

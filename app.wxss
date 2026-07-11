@@ -7,10 +7,12 @@ page {
   --card-border: transparent;
   --text-primary: #1A0E08;
   --text-secondary: #A09080;
-  --text-light: #C0B0A0;
+  --text-tertiary: #C0B0A0;
+  --text-light: #D8D0C8;
   --divider: #F0EDE8;
   --accent: #D32F2F;
   --accent-light: #FFF0F0;
+  --accent-secondary: #F57C00;
   --surface: #F8F5F0;
   --hero-icon-shadow: none;
   --hero-title: #1A0E08;
@@ -31,6 +33,42 @@ page {
   --play-btn-active-shadow: 0 4rpx 16rpx rgba(46, 125, 50, 0.25);
   --save-btn-bg: linear-gradient(135deg, #D32F2F, #F57C00);
 
+  --shadow-sm: 0 2rpx 8rpx rgba(44, 24, 16, 0.04);
+  --shadow-md: 0 4rpx 24rpx rgba(44, 24, 16, 0.06);
+  --shadow-lg: 0 8rpx 40rpx rgba(44, 24, 16, 0.10);
+
+  --space-xs: 8rpx;
+  --space-sm: 16rpx;
+  --space-md: 24rpx;
+  --space-lg: 32rpx;
+  --space-xl: 48rpx;
+
+  --radius-sm: 12rpx;
+  --radius-md: 18rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+
+  --font-xs: 20rpx;
+  --font-sm: 24rpx;
+  --font-md: 28rpx;
+  --font-lg: 34rpx;
+  --font-xl: 44rpx;
+
+  --tuner-bg: #1A1A2E;
+  --tuner-surface: #222240;
+  --tuner-surface-alt: #2A2A4A;
+  --tuner-border: #3A3A5A;
+  --tuner-text: #F0EBE0;
+  --tuner-text-dim: #8888A0;
+  --tuner-success: #4CAF50;
+  --tuner-success-soft: #2A5A2E;
+  --tuner-warning: #FF8844;
+  --tuner-warning-soft: #3A2A18;
+  --tuner-danger: #FF6B6B;
+  --tuner-danger-soft: #3A1818;
+  --tuner-info: #66BBFF;
+  --tuner-info-soft: #18223A;
+
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   box-sizing: border-box;
@@ -44,10 +82,12 @@ page {
   --card-border: #333358;
   --text-primary: #F0EBE0;
   --text-secondary: #A09888;
-  --text-light: #706858;
+  --text-tertiary: #706858;
+  --text-light: #504840;
   --divider: #2E2E50;
   --accent: #FF6B6B;
   --accent-light: #331818;
+  --accent-secondary: #E85555;
   --surface: #1A1A2E;
   --hero-icon-shadow: 0 0 20rpx rgba(255, 107, 107, 0.2);
   --hero-title: #FF6B6B;
@@ -67,4 +107,23 @@ page {
   --play-btn-active-bg: #3A9A5A;
   --play-btn-active-shadow: 0 4rpx 16rpx rgba(58, 154, 90, 0.25);
   --save-btn-bg: linear-gradient(135deg, #FF6B6B, #E85555);
+
+  --shadow-sm: 0 2rpx 8rpx rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4rpx 24rpx rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 8rpx 40rpx rgba(0, 0, 0, 0.35);
+
+  --tuner-bg: #0E0E1E;
+  --tuner-surface: #1A1A30;
+  --tuner-surface-alt: #222238;
+  --tuner-border: #2E2E48;
+  --tuner-text: #F0EBE0;
+  --tuner-text-dim: #706878;
+  --tuner-success: #4CAF50;
+  --tuner-success-soft: #1A3A1E;
+  --tuner-warning: #FF8844;
+  --tuner-warning-soft: #2A1A10;
+  --tuner-danger: #FF6B6B;
+  --tuner-danger-soft: #2A1010;
+  --tuner-info: #66BBFF;
+  --tuner-info-soft: #101A2A;
 }

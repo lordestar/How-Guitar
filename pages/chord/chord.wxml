@@ -1,5 +1,4 @@
 <view class="container {{darkMode ? 'dark-mode' : ''}}">
-  <!-- 和弦选择卡片 -->
   <view class="card">
     <view class="card-header">
       <text class="card-title">和弦选择</text>
@@ -19,6 +18,7 @@
           data-index="{{i}}"
         >
           <text>{{note}}</text>
+          <view class="root-indicator"></view>
         </view>
       </view>
     </view>
@@ -35,6 +35,7 @@
           bindtap="selectType"
           data-index="{{i}}"
         >
+          <view class="type-indicator"></view>
           <text class="type-name">{{type.name}}</text>
           <text class="type-key">{{type.key}}</text>
         </view>
@@ -45,39 +46,14 @@
   <view class="note-preview" wx:if="{{previewNotes}}">
     <text class="note-preview-label">组成音</text>
     <view class="note-pills">
-      <text wx:for="{{previewNotesArray}}" wx:for-item="n" wx:for-index="i" wx:key="*this" class="note-pill">{{n}}</text>
+      <text wx:for="{{previewNotesArray}}" wx:for-item="n" wx:for-index="i" wx:key="*this" class="note-pill {{i === 0 ? 'note-pill-root' : ''}}">{{n}}</text>
     </view>
   </view>
-
-  <view class="card">
-    <view class="card-header">
-      <text class="card-title">指板范围</text>
-    </view>
-    <view class="fret-options">
-      <view
-        class="fret-option {{maxFret === 5 ? 'active' : ''}}"
-        bindtap="onSetMaxFret"
-        data-fret="5"
-      >
-        <text class="fret-num">5</text>
-        <text class="fret-label">前5品</text>
-      </view>
-      <view
-        class="fret-option {{maxFret === 12 ? 'active' : ''}}"
-        bindtap="onSetMaxFret"
-        data-fret="12"
-      >
-        <text class="fret-num">12</text>
-        <text class="fret-label">前12品</text>
-      </view>
-    </view>
-  </view>
-
   <view class="error-msg" wx:if="{{errorMsg}}">
     <text>{{errorMsg}}</text>
   </view>
 
-  <button class="generate-btn" bindtap="onGenerate" loading="{{isLoading}}">
+  <button class="generate-btn btn-gradient" bindtap="onGenerate" loading="{{isLoading}}">
     <text>{{isLoading ? '计算中...' : '查看指法'}}</text>
   </button>
 

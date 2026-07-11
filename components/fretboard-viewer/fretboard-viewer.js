@@ -12,7 +12,7 @@ Component({
   },
 
   observers: {
-    'currentIndex': function () {
+    currentIndex: function () {
       this.drawCanvas();
     },
   },
@@ -35,7 +35,8 @@ Component({
       }
 
       var query = wx.createSelectorQuery().in(this);
-      query.select('#fretboardCanvas')
+      query
+        .select('#fretboardCanvas')
         .fields({ node: true, size: true })
         .exec(function (res) {
           if (!res || !res[0]) return;
@@ -61,43 +62,46 @@ Component({
     },
 
     saveToAlbum: function () {
-      return new Promise(function (resolve, reject) {
-        wx.showLoading({ title: '保存中...' });
-        var query = wx.createSelectorQuery().in(this);
-        query.select('#fretboardCanvas')
-          .fields({ node: true, size: true })
-          .exec(function (res) {
-            if (!res || !res[0]) {
-              wx.hideLoading();
-              reject(new Error('canvas not found'));
-              return;
-            }
-            var canvas = res[0].node;
-            wx.canvasToTempFilePath({
-              canvas: canvas,
-              success: function (res) {
-                wx.saveImageToPhotosAlbum({
-                  filePath: res.tempFilePath,
-                  success: function () {
-                    wx.hideLoading();
-                    wx.showToast({ title: '保存成功', icon: 'success' });
-                    resolve();
-                  },
-                  fail: function () {
-                    wx.hideLoading();
-                    wx.showToast({ title: '保存失败，请授权相册', icon: 'none' });
-                    reject(new Error('save failed'));
-                  },
-                });
-              },
-              fail: function () {
+      return new Promise(
+        function (resolve, reject) {
+          wx.showLoading({ title: '保存中...' });
+          var query = wx.createSelectorQuery().in(this);
+          query
+            .select('#fretboardCanvas')
+            .fields({ node: true, size: true })
+            .exec(function (res) {
+              if (!res || !res[0]) {
                 wx.hideLoading();
-                wx.showToast({ title: '生成图片失败', icon: 'none' });
-                reject(new Error('generate failed'));
-              },
+                reject(new Error('canvas not found'));
+                return;
+              }
+              var canvas = res[0].node;
+              wx.canvasToTempFilePath({
+                canvas: canvas,
+                success: function (res) {
+                  wx.saveImageToPhotosAlbum({
+                    filePath: res.tempFilePath,
+                    success: function () {
+                      wx.hideLoading();
+                      wx.showToast({ title: '保存成功', icon: 'success' });
+                      resolve();
+                    },
+                    fail: function () {
+                      wx.hideLoading();
+                      wx.showToast({ title: '保存失败，请授权相册', icon: 'none' });
+                      reject(new Error('save failed'));
+                    },
+                  });
+                },
+                fail: function () {
+                  wx.hideLoading();
+                  wx.showToast({ title: '生成图片失败', icon: 'none' });
+                  reject(new Error('generate failed'));
+                },
+              });
             });
-          });
-      }.bind(this));
+        }.bind(this)
+      );
     },
   },
 });

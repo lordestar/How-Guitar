@@ -2,17 +2,17 @@
   <view class="result-header">
     <view class="header-left">
       <text class="chord-name">{{chordName}}</text>
-      <text class="chord-notes">组成音: {{chordNotes}}</text>
+      <view class="chord-notes-pills">
+        <text class="notes-pill notes-pill-root">{{chordNotes}}</text>
+      </view>
     </view>
     <view class="header-actions">
-      <!-- 收藏按钮 -->
       <view class="action-icon-btn {{isFavorited ? 'fav-active' : ''}}" bindtap="onToggleFavorite">
-        <text>{{isFavorited ? '★' : '☆'}}</text>
+        <text class="fav-heart">{{isFavorited ? '♥' : '♡'}}</text>
       </view>
     </view>
   </view>
 
-  <!-- 指板图组件 -->
   <view>
     <fretboard-viewer
       id="fretboardViewer"
@@ -26,7 +26,6 @@
     />
   </view>
 
-  <!-- 播放/导航操作栏 -->
   <view class="action-bar">
     <view class="nav-group" wx:if="{{totalCount > 1}}">
       <view class="nav-btn" bindtap="prevFingering">
@@ -43,35 +42,39 @@
   </view>
 
   <view class="fingering-title-wrap">
-    <view class="fingering-title" wx:if="{{currentFingering}}">
+    <view class="fingering-title fingering-title-bordered" wx:if="{{currentFingering}}">
       <text>{{currentFingering.name}}</text>
     </view>
   </view>
 
-  <!-- 和弦说明卡片 -->
   <view class="chord-info-card" wx:if="{{chordInfo}}">
     <view class="info-row">
+      <view class="info-dot"></view>
       <text class="info-label">角色</text>
       <text class="info-value">{{chordInfo.role}}</text>
     </view>
     <view class="info-row">
+      <view class="info-dot"></view>
       <text class="info-label">听感</text>
       <text class="info-value">{{chordInfo.feeling}}</text>
     </view>
     <view class="info-row info-row-multi" wx:if="{{chordInfo.keys}}">
+      <view class="info-dot"></view>
       <text class="info-label">常出现在</text>
       <text class="info-value">{{chordInfo.keys}}</text>
     </view>
-    <view class="info-divider"></view>
+    <view class="info-divider-dashed"></view>
     <view class="info-desc">
       <text>{{chordInfo.function}}</text>
     </view>
-    <view class="info-divider"></view>
+    <view class="info-divider-dashed"></view>
     <view class="info-row" wx:if="{{chordInfo.progression}}">
+      <view class="info-dot"></view>
       <text class="info-label">典型进行</text>
       <text class="info-value info-prog">{{chordInfo.progression}}</text>
     </view>
     <view class="info-row" wx:if="{{chordInfo.songExample}}">
+      <view class="info-dot"></view>
       <text class="info-label">代表歌曲</text>
       <text class="info-value info-song">{{chordInfo.songExample}}</text>
     </view>
@@ -84,16 +87,19 @@
       <text class="col-fret">品</text>
       <text class="col-status">状态</text>
     </view>
-    <view wx:for="{{stringDetails}}" wx:for-item="sd" wx:for-index="i" wx:key="shortName" class="table-row">
+    <view wx:for="{{stringDetails}}" wx:for-item="sd" wx:for-index="i" wx:key="shortName" class="table-row {{i % 2 === 1 ? 'table-row-alt' : ''}}">
       <text class="col-string">{{sd.shortName}}</text>
       <text class="col-note {{sd.noteColor}}">{{sd.noteDisplay}}</text>
       <text class="col-fret">{{sd.fretDisplay}}</text>
-      <text class="col-status">{{sd.statusDisplay}}</text>
+      <text class="col-status">
+        <view class="status-dot {{sd.indicatorClass === 'indicator-muted' ? 'status-muted' : (sd.indicatorClass === 'indicator-open' ? 'status-open' : 'status-fretted')}}"></view>
+        {{sd.statusDisplay}}
+      </text>
     </view>
   </view>
 
   <view class="action-buttons">
-    <button class="save-btn" bindtap="onSaveImage" loading="{{saving}}">
+    <button class="save-btn btn-gradient" bindtap="onSaveImage" loading="{{saving}}">
       <text>保存图片到相册</text>
     </button>
   </view>

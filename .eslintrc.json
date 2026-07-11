@@ -1,0 +1,27 @@
+{
+  "env": {
+    "es2021": true,
+    "node": true,
+    "browser": true
+  },
+  "globals": {
+    "wx": "readonly",
+    "Page": "readonly",
+    "App": "readonly",
+    "Component": "readonly",
+    "getApp": "readonly",
+    "getCurrentPages": "readonly"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2021
+  },
+  "extends": ["eslint:recommended", "prettier"],
+  "rules": {
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-duplicate-imports": "warn",
+    "no-unused-vars": "warn",
+    "no-console": "off"
+  },
+  "ignorePatterns": ["node_modules/", ".git/", "coverage/"]
+}

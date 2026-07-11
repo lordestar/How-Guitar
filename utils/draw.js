@@ -1,28 +1,28 @@
 // ============ utils/draw.js ============
 // 绘制吉他指板图 — 仅绘制指板+圆点，左标签由 HTML 固定列实现
 
-var FRET_LINE_COLOR = '#999';
-var FRET_BOARD_BG = '#FFF8E1';
-var STRING_COLORS = ['#AAA', '#888', '#888', '#555', '#555', '#555'];
-var FRET_MARKER_COLOR = '#DDD';
+const FRET_LINE_COLOR = '#999';
+const FRET_BOARD_BG = '#FFF8E1';
+const STRING_COLORS = ['#AAA', '#888', '#888', '#555', '#555', '#555'];
+const FRET_MARKER_COLOR = '#DDD';
 
 function drawFretboard(ctx, options) {
-  var width = options.width || 350;
-  var height = options.height || 280;
-  var maxFret = options.maxFret || 5;
-  var fingerings = options.fingerings || [];
-  var currentIndex = options.currentIndex || 0;
+  const width = options.width || 350;
+  const height = options.height || 280;
+  const maxFret = options.maxFret || 5;
+  const fingerings = options.fingerings || [];
+  const currentIndex = options.currentIndex || 0;
 
-  var padding = { top: 22, bottom: 18, left: 12, right: 12 };
+  const padding = { top: 22, bottom: 18, left: 12, right: 12 };
 
-  var fretboardWidth = width - padding.left - padding.right;
-  var fretboardHeight = height - padding.top - padding.bottom;
-  var fretSpacing = fretboardWidth / (maxFret + 1);
-  var stringSpacing = fretboardHeight / 5;
+  const fretboardWidth = width - padding.left - padding.right;
+  const fretboardHeight = height - padding.top - padding.bottom;
+  const fretSpacing = fretboardWidth / (maxFret + 1);
+  const stringSpacing = fretboardHeight / 5;
 
-  var fontSize = maxFret >= 10 ? 9 : 11;
-  var dotRadius = maxFret >= 10 ? 5 : 7;
-  var markerRadius = maxFret >= 10 ? 3 : 4;
+  const fontSize = maxFret >= 10 ? 9 : 11;
+  const dotRadius = maxFret >= 10 ? 5 : 7;
+  const markerRadius = maxFret >= 10 ? 3 : 4;
 
   ctx.clearRect(0, 0, width, height);
   ctx.fillStyle = FRET_BOARD_BG;
@@ -31,8 +31,8 @@ function drawFretboard(ctx, options) {
   // 品丝 (竖线)
   ctx.strokeStyle = FRET_LINE_COLOR;
   ctx.lineWidth = 1.5;
-  for (var fIdx = 0; fIdx <= maxFret; fIdx++) {
-    var fx2 = padding.left + fIdx * fretSpacing;
+  for (let fIdx = 0; fIdx <= maxFret; fIdx++) {
+    const fx2 = padding.left + fIdx * fretSpacing;
     ctx.beginPath();
     ctx.moveTo(fx2, padding.top);
     ctx.lineTo(fx2, padding.top + fretboardHeight);
@@ -40,10 +40,10 @@ function drawFretboard(ctx, options) {
   }
 
   // 琴弦 (横线)
-  var stringWeights = [1.5, 2, 2, 3, 3, 4];
-  for (var sIdx = 0; sIdx < 6; sIdx++) {
-    var revIdx = 5 - sIdx;
-    var yPos = padding.top + revIdx * stringSpacing;
+  const stringWeights = [1.5, 2, 2, 3, 3, 4];
+  for (let sIdx = 0; sIdx < 6; sIdx++) {
+    const revIdx = 5 - sIdx;
+    const yPos = padding.top + revIdx * stringSpacing;
     ctx.strokeStyle = STRING_COLORS[sIdx];
     ctx.lineWidth = stringWeights[sIdx];
     ctx.beginPath();
@@ -57,13 +57,13 @@ function drawFretboard(ctx, options) {
   ctx.fillRect(padding.left - 4, padding.top, 4, fretboardHeight);
 
   // 品格标记圆点
-  var markerPositions = [3, 5, 7, 9, 12];
+  const markerPositions = [3, 5, 7, 9, 12];
   ctx.fillStyle = FRET_MARKER_COLOR;
-  for (var mIdx = 0; mIdx < markerPositions.length; mIdx++) {
-    var mf = markerPositions[mIdx];
+  for (let mIdx = 0; mIdx < markerPositions.length; mIdx++) {
+    const mf = markerPositions[mIdx];
     if (mf > maxFret) break;
-    var mx2 = padding.left + (mf - 0.5) * fretSpacing;
-    var my2 = padding.top + fretboardHeight / 2;
+    const mx2 = padding.left + (mf - 0.5) * fretSpacing;
+    const my2 = padding.top + fretboardHeight / 2;
     ctx.beginPath();
     ctx.arc(mx2, my2, markerRadius, 0, Math.PI * 2);
     ctx.fill();
@@ -79,10 +79,10 @@ function drawFretboard(ctx, options) {
 
   // 品数标记 (底部)
   ctx.fillStyle = '#999';
-  ctx.font = (fontSize - 1) + 'px sans-serif';
+  ctx.font = fontSize - 1 + 'px sans-serif';
   ctx.textAlign = 'center';
-  for (var fi = 1; fi <= maxFret; fi++) {
-    var fx3 = padding.left + (fi - 0.5) * fretSpacing;
+  for (let fi = 1; fi <= maxFret; fi++) {
+    const fx3 = padding.left + (fi - 0.5) * fretSpacing;
     ctx.fillText(String(fi), fx3, padding.top + fretboardHeight + fontSize + 4);
   }
 
@@ -95,23 +95,23 @@ function drawFretboard(ctx, options) {
     return;
   }
 
-  var fingering = fingerings[currentIndex];
+  const fingering = fingerings[currentIndex];
   if (!fingering) return;
 
-  var strings = fingering.strings;
+  const strings = fingering.strings;
   if (!strings || strings.length !== 6) return;
 
-  for (var si = 0; si < 6; si++) {
-    var st = strings[si];
-    var revY = 5 - si;
-    var sy3 = padding.top + revY * stringSpacing;
+  for (let si = 0; si < 6; si++) {
+    const st = strings[si];
+    const revY = 5 - si;
+    const sy3 = padding.top + revY * stringSpacing;
 
     if (st.fret === 'x' || st.fret === 0 || st.fret === '0') {
       continue;
     }
-    var fret = parseInt(st.fret, 10);
-    var dx = padding.left + fret * fretSpacing;
-    var cx = dx - fretSpacing / 2;
+    const fret = parseInt(st.fret, 10);
+    const dx = padding.left + fret * fretSpacing;
+    const cx = dx - fretSpacing / 2;
 
     ctx.beginPath();
     ctx.arc(cx, sy3, dotRadius + 3, 0, Math.PI * 2);
